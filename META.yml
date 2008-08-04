@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Distribution-Guess-BuildSystem
-version:             0.10_01
+version:             0.10_02
 abstract:            This is what the module does
 license:             perl
 author:              
