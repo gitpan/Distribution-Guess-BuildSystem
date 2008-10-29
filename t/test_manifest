@@ -2,7 +2,6 @@
 load.t
 pod.t
 pod_coverage.t
-#prereq.t
 file_has_string.t
 makemaker-true.t
 makemaker-build-wrapped.t

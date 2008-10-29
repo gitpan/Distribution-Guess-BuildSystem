@@ -15,7 +15,7 @@ use File::Spec::Functions qw(catfile);
 
 use Module::Extract::VERSION;
 
-$VERSION = '0.10_02';
+$VERSION = '0.11';
 
 =head1 NAME
 
@@ -31,7 +31,7 @@ Distribution::Guess::BuildSystem - This is the description
 		dist_dir => $dir
 		);
 	
-	my $build_files    = $guesser->build_files; # Hash ref
+	my $build_files   = $guesser->build_files; # Hash ref
 	
 	my $build_pl      = $guesser->has_build_pl;
 	my $makefile_pl   = $guesser->has_makefile_pl;
@@ -141,6 +141,34 @@ sub build_files
 
 }
 
+=item preferred_build_file
+
+Returns the build file that you should use, even if there is more than
+one. Right now this is simple. If C<Build.PL> is there, use it before
+C<Makefile.PL>.
+
+=cut
+
+sub preferred_build_file
+	{
+	return $_[0]->build_pl    if $_[0]->has_build_pl;
+	return $_[0]->makefile_pl if $_[0]->has_makefile_pl;
+	}
+
+=item preferred_build_command
+
+Returns the build command that you should use, even if there is more than
+one. Right now this is simple. If C<Build.PL> is there, return C<perl>.
+If not and C<Makefile.PL> is there, return C<make>.
+
+=cut
+
+sub preferred_build_command
+	{
+	return $_[0]->perl_command if $_[0]->has_build_pl;
+	return $_[0]->make_command if $_[0]->has_makefile_pl;
+	}
+	
 =item build_file_paths
 
 Returns an anonymous hash to the paths to the build files, based on
@@ -264,14 +292,19 @@ The distro uses ExtUtils::Makemaker.
 
 =cut
 
+sub _get_modules
+	{
+	my( $self, $path ) = @_;
+	my $extractor = $self->module_extractor_class->new;
+	$extractor->get_modules( $path );	
+	}
+	
 sub uses_makemaker
 	{
 	return unless $_[0]->has_makefile_pl;
-
-	scalar grep { $_ eq $_[0]->makemaker_name }
-		$_[0]->module_extractor_class->get_modules( 
-			$_[0]->makefile_pl_path
-			);
+	
+	scalar grep { $_ eq $_[0]->makemaker_name } 
+		$_[0]->_get_modules( $_[0]->makefile_pl_path )
 	}
 
 =item makemaker_version
@@ -317,10 +350,8 @@ sub uses_module_build
 	{
 	return unless $_[0]->has_build_pl;
 
-	scalar grep { $_ eq $_[0]->module_build_name }
-		$_[0]->module_extractor_class->get_modules( 
-			$_[0]->build_pl_path
-			);
+	scalar grep { $_ eq $_[0]->module_build_name } 
+		$_[0]->_get_modules( $_[0]->build_pl_path )
 	}
 
 =item module_build_version
@@ -346,10 +377,8 @@ sub uses_module_install
 	{		
 	return unless $_[0]->has_makefile_pl;
 
-	scalar grep { $_ eq $_[0]->module_install_name }
-		$_[0]->module_extractor_class->get_modules( 
-			$_[0]->makefile_pl_path
-			);
+	scalar grep { $_ eq $_[0]->module_install_name } 
+		$_[0]->_get_modules( $_[0]->makefile_pl_path )
 	}
 
 =item uses_auto_install
@@ -552,13 +581,9 @@ BEGIN { require Module::Extract::Use }
 
 =head1 SOURCE AVAILABILITY
 
-This source is part of a SourceForge project which always has the
-latest sources in SVN, as well as all of the previous releases.
+This source is in Github:
 
-	http://sourceforge.net/projects/brian-d-foy/
-
-If, for some reason, I disappear from the world, one of the other
-members of the project can shepherd this module appropriately.
+	git://github.com/briandfoy/distribution-guess-buildsystem.git
 
 =head1 AUTHOR
 
