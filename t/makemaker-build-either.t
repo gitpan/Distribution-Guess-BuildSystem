@@ -62,8 +62,8 @@ is( scalar keys %$hash, 2, "There is only one hash key in build_commands" );
 
 my @keys = sort keys %$hash;
 
-ok( scalar grep { /^[dn]?make\z/ } @keys, 'Uses a make variant' );
-ok( scalar grep { /perl/         } @keys, 'Uses perl' );
+ok( scalar grep { qr/^[nd]?make(?:.exe)?\z/ } @keys, 'Uses a make variant' );
+ok( scalar grep { /perl/                    } @keys, 'Uses perl' );
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -83,7 +83,7 @@ is( $guesser->build_pl_path,
 is( $guesser->preferred_build_file, $guesser->build_pl,
 	"the preferred build file is a Module::Build variant" );
 
-is( $guesser->preferred_build_command, $guesser->perl_command,
+is( $guesser->preferred_build_command, $guesser->build_command,
 	"the preferred build command is a make variant" );
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -109,6 +109,8 @@ foreach my $method ( @pass_methods )
 my @fail_methods = qw(
 	uses_module_build_compat
 	uses_module_install uses_auto_install
+	uses_makemaker_only
+	uses_module_build_only
 	);
 
 can_ok( $class, @fail_methods );
@@ -118,5 +120,5 @@ foreach my $method ( @fail_methods )
 	ok( ! $guesser->$method(), "$method returns false (good)" );
 	}
 }
-	
+
 1;

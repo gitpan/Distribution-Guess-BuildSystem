@@ -56,7 +56,7 @@ is( $paths->{ $guesser->makefile_pl }, $guesser->makefile_pl_path,
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # Should be Makefile.PL
-like( $guesser->make_command, qr/^[nd]?make\z/, 'Build command from %Config is make' );
+like( $guesser->make_command, qr/^[nd]?make(?:.exe)?\z/, 'Build command from %Config is make' );
 
 is( $guesser->makefile_pl_path, 
 	File::Spec->catfile( $test_distro_directory, $guesser->makefile_pl ),
@@ -71,7 +71,7 @@ is( scalar keys %$hash, 1, "There is only one hash key in build_commands" );
 
 my @keys = keys %$hash;
 
-like( $keys[0], qr/^[dn]?make\z/, 'Uses a make variant' );
+like( $keys[0], qr/^[nd]?make(?:.exe)?\z/, 'Uses a make variant' );
 
 is( $guesser->preferred_build_file, $guesser->makefile_pl,
 	"the preferred build command is a make variant" );
@@ -84,7 +84,7 @@ is( $guesser->preferred_build_command, $guesser->make_command,
 # These should return true
 {
 my @pass_methods = qw(
-	uses_makemaker has_makefile_pl makemaker_version
+	uses_makemaker has_makefile_pl makemaker_version makefile_pl_path
 	);
 
 can_ok( $class, @pass_methods );
@@ -101,7 +101,7 @@ foreach my $method ( @pass_methods )
 my @fail_methods = qw(
 	has_build_pl has_build_and_makefile uses_module_build_compat
 	uses_module_install uses_auto_install module_build_version
-	module_install_version
+	module_install_version uses_module_build_only 
 	);
 
 can_ok( $class, @fail_methods );
