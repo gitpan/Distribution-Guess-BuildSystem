@@ -1,26 +1,26 @@
---- #YAML:1.0
-name:               Distribution-Guess-BuildSystem
-version:            0.12_01
-abstract:           This is what the module does
+---
+abstract: 'This is what the module does'
 author:
-    - brian d foy <bdfoy@cpan.org>
-license:            perl
-distribution_type:  module
-configure_requires:
-    ExtUtils::MakeMaker:  6.55
+  - 'brian d foy <bdfoy@cpan.org>'
 build_requires:
-    Test::More:    0
-    Test::Output:  0
-requires:
-    Module::Extract::Use:  0
-    Module::Extract::VERSION:  0
-    Test::More:           0
-    Test::Output:         0
-no_index:
-    directory:
-        - t
-        - inc
-generated_by:       ExtUtils::MakeMaker version 6.55_02
+  ExtUtils::MakeMaker: 0
+  Test::More: 0
+  Test::Output: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.64
+dynamic_config: 1
+generated_by: 'ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.120921'
+license: perl
 meta-spec:
-    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
-    version:  1.4
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Distribution-Guess-BuildSystem
+no_index:
+  directory:
+    - t
+    - inc
+requires:
+  Module::Extract::Use: 0
+  Module::Extract::VERSION: 0
+  Test::More: 0
+version: 0.12_02

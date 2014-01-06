@@ -1,9 +1,11 @@
+.travis.yml
 Changes
 examples/build_guesser.pl
 lib/BuildSystem.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
+MANIFEST.SKIP
 README
 t/_setting.t
 t/file_has_string.t
@@ -31,4 +33,5 @@ t/test-distros/module-install/inc/Module/Install.pm
 t/test-distros/module-install/Makefile.PL
 t/test-distros/no-build-file/README
 t/test_manifest
-META.yml                                 Module meta-data (added by MakeMaker)
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)
